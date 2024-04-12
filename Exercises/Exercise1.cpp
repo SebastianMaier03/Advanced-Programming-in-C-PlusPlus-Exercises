@@ -3,8 +3,8 @@
 #include <limits>
 #include <algorithm>
 #include <valarray>
-//Exercise1
 
+//Exercise1
 void PrintDynamicArray(std::vector<int> arr) {
     std::cout << "(";
 
