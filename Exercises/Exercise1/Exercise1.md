@@ -1,4 +1,4 @@
-
+![img.png](img.png)s
 # Exercise 1: Basics
 
 - These exercises are somewhat similar to Coding Bat exercises and cover basic logic, loops and branches.
