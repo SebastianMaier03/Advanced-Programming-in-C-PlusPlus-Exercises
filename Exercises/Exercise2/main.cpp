@@ -22,11 +22,12 @@ int main() {
     Grid grid(5, 4);
 
     grid.SetValueAtLocation(int2(1, 6), true);
-    //grid.SetValueAtLocation(int2(2, 2), true);
-    //grid.SetValueAtLocation(int2(3, 3), true);
-    //rid.SetValueAtLocation(int2(4, 4), true);
-    //grid.SetValueAtLocation(int2(3, 3), true);
-    //grid.SetValueAtLocation(int2(1, 3), true);
+    grid.SetValueAtLocation(int2(2, 2), true);
+    grid.SetValueAtLocation(int2(3, 3), true);
+    grid.SetValueAtLocation(int2(4, 4), true);
+    grid.SetValueAtLocation(int2(3, 3), true);
+
+    grid.SetValueAtLocation(int2(1, 3), true);
 
 
     grid.Print();
