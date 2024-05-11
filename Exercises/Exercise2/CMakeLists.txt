@@ -12,4 +12,10 @@ add_executable(Exercise2
         Grid.h
         Int2.cpp
         Int2.h
-        main.cpp)
+        main.cpp
+        Int2.cpp
+        MinesweeperCell.h
+        MinesweeperCell.h
+        MinesweeperCell.cpp
+        MinesweeperGrid.cpp
+        MinesweeperGrid.h)

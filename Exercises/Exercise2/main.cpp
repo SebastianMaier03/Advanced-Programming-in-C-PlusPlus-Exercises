@@ -1,46 +1,46 @@
 #include "Int2.h"
-#include "Cell.h"
-#include "Grid.h"
+#include "MinesweeperGrid.h"
 
 #include <iostream>
 
 int main() {
-    int2 point1;
-    std::cout << point1.x << ", " << point1.y << std::endl;
+    // Exercise 3.1
+    int2 a(3, 4);
+    int2 b(2, 3);
+    int2 c = a + b;		//expected value of c: (x= 5,y= 7)
+    int2 d = a - c;		//expected value of d: (x=-2,y=-3)
+    b = d * a;		    //expected value of b: (x=-6,y=-12)
+    int2 e = b / c;		//expected value of e: (x=-1,y=-1)
+    a.x = 2;		    //expected value of a: (x= 2,y= 4)
+    c *= a;			    //expected value of c: (x=10,y=28)
+    c *= 2;			    //expected value of c: (x=20,y=56)
+    d += a;			    //expected value of d: (x= 0,y= 1)
+    d -= b;			    //expected value of d: (x= 6,y=13)
+    d.y = 6;		    //expected value of d: (x= 6,y= 6)
 
-    int2 point2(5, 8);
-
-    std::cout <<  point2.x << ", "<< point2.y << std::endl;
-    int2 position(3, 4);
-    Cell cell(position);
-
-    int2 cellPosition = cell.GetPosition();
-    std::cout << cellPosition.x << ", " << cellPosition.y ;
-
-    std::cout << std::endl;
-
-    Grid grid(5, 4);
-
-    grid.SetValueAtLocation(int2(1, 6), true);
-    grid.SetValueAtLocation(int2(2, 2), true);
-    grid.SetValueAtLocation(int2(3, 3), true);
-    grid.SetValueAtLocation(int2(4, 4), true);
-    grid.SetValueAtLocation(int2(3, 3), true);
-
-    grid.SetValueAtLocation(int2(1, 3), true);
+    std::cout << d << std::endl; //expected output: (6|6)
+    std::cout << e << std::endl; //expected output: (6|6)
 
 
-    grid.Print();
+    // Create a MinesweeperCell
+    MinesweeperCell cell1({3, 5}, false); // Cell at position (3, 5), not a bomb
+    MinesweeperCell cell2({2, 4}, true);  // Cell at position (2, 4), is a bomb
 
-    std::cout << "Value at index 6: " << grid.GetValueAtIndex(6) << std::endl;
+    // Display cell information
+    std::cout << "Cell 1 position: (" << cell1.GetPosition().x << ", " << cell1.GetPosition().y << ")" << std::endl;
+    std::cout << "Cell 1 is a bomb: " << (cell1.IsBomb() ? "Yes" : "No") << std::endl;
+    std::cout << "Cell 2 position: (" << cell2.GetPosition().x << ", " << cell2.GetPosition().y << ")" << std::endl;
+    std::cout << "Cell 2 is a bomb: " << (cell2.IsBomb() ? "Yes" : "No") << std::endl;
 
-    std::cout << "Value at location (2, 2): " << grid.GetValueAtLocation(int2(2, 2)) << std::endl;
+    // Create a Minesweeper grid with width 5, height 5, and 20% bombs
+    MinesweeperGrid grid(20, 20, 0.2f);
 
-    std::cout << "Index for location (3, 2): " << grid.GetIndexFromLocation(int2(3, 2)) << std::endl;
-
-
-    int2 location = grid.GetLocationFromIndex(13);
-    std::cout << "Location for index 13: (" << location.x << ", " << location.y << ")" << std::endl;
+    // Print the grid
+    std::cout << "Minesweeper Grid:" << std::endl;
+    grid.PrintGrid();
 
     return 0;
+
+
+
 }
