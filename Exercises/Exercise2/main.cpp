@@ -65,8 +65,6 @@ int main() {
                                     }
                                 }
                                 if (allBombCellsFlagged) {
-                                    std::cout << "Congratulations! You have won the game!" << std::endl;
-                                    gameOver = true;
                                     gameWon = true;
                                 }
                             }
@@ -83,6 +81,10 @@ int main() {
             std::cout << "Game Over! Revealing all bombs:" << std::endl;
             grid.RevealAllBombs();
             grid.PrintGrid();
+            system("pause");
+        }
+        if (gameWon) {
+            std::cout << "Congratulations! You have won the game!" << std::endl;
             system("pause");
         }
     return 0;
