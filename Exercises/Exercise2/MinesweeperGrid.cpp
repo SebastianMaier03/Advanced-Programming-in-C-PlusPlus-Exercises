@@ -17,7 +17,7 @@ void MinesweeperGrid::InitializeCells() {
     srand(static_cast<unsigned int>(time(nullptr)));
 
     unsigned int totalCells = m_Width * m_Height;
-    unsigned int numBombs = static_cast<unsigned int>(totalCells * m_BombsPercentage);
+    auto numBombs = static_cast<unsigned int>(totalCells * m_BombsPercentage);
 
     for (unsigned int i = 0; i < numBombs; ++i) {
         unsigned int randomIndex = rand() % totalCells;
