@@ -31,6 +31,7 @@ public:
     bool IsCellFlagged(int2 location) const;
     void FlagCell(int2 location);
 private:
+    bool showBombs = false;
     unsigned int m_Width = 0;
     unsigned int m_Height = 0;
     float m_BombsPercentage = 0.0f;

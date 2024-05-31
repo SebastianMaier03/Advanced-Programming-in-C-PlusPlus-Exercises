@@ -103,7 +103,11 @@ void MinesweeperGrid::ClickCell(int2 location) {
         unsigned int index = GetIndexFromLocation(location);
         if (!m_Revealed[index]) {
             if (IsCellFlagged(location)) {
-                m_Values[index].m_Flagged = false;
+                return;
+            }
+            if (IsBomb(index)) {
+                m_Revealed[index] = true;
+                return;
             }
             m_Revealed[index] = true;
             if (GetNeighborBombCount(index) == 0) {
@@ -114,13 +118,9 @@ void MinesweeperGrid::ClickCell(int2 location) {
                     }
                 }
             }
-            else if (!IsBomb(location)) {
-                return;
-            }
         }
     }
 }
-
 
 
 bool MinesweeperGrid::IsRevealed(int2 location) const {
@@ -149,6 +149,7 @@ void MinesweeperGrid::FlagCell(int2 location) {
     }
 }
 void MinesweeperGrid::RevealAllBombs() {
+    showBombs = true;
     for (unsigned int i = 0; i < m_Values.size(); ++i) {
         if (m_Values[i].IsBomb()) {
             m_Revealed[i] = true;
@@ -167,20 +168,22 @@ void MinesweeperGrid::PrintGrid() const {
         std::cout << "|";
         for (unsigned int x = 0; x < m_Width; ++x) {
             unsigned int index = y * m_Width + x;
-            if (IsCellFlagged(int2(x, y))) {
-                std::cout << "F";
-            } else if (!m_Revealed[index]) {
-                std::cout << ".";
-            } else if (IsBomb(index)) {
-                std::cout << "X";
-            } else {
-                int neighborBombCount = GetNeighborBombCount(index);
-                if (neighborBombCount > 0) {
-                    std::cout << neighborBombCount;
+            if (m_Revealed[index]) {
+                if (IsBomb(index)) {
+                    std::cout << "X";
                 } else {
-                    // Display a blank space for revealed non-bomb cells
-                    std::cout << " ";
+                    int neighborBombCount = GetNeighborBombCount(index);
+                    if (neighborBombCount > 0) {
+                        std::cout << neighborBombCount;
+                    } else {
+                        // Display a blank space for revealed non-bomb cells
+                        std::cout << " ";
+                    }
                 }
+            } else if (IsCellFlagged(int2(x, y)) && !showBombs) {
+                std::cout << "F";
+            } else {
+                std::cout << ".";
             }
         }
         std::cout << "|" << std::endl;

@@ -73,6 +73,7 @@ int main() {
                         }
                     } else if (mouseState & RIGHTMOST_BUTTON_PRESSED) {
                         grid.FlagCell(clickLocation);
+                        clear();
                         grid.PrintGrid();
                     }
                     break;
