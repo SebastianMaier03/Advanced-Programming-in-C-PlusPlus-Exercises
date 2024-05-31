@@ -17,7 +17,7 @@ public:
     int m_NeighborBombCount = 0;
     bool m_Revealed = true;
     bool m_Flagged = false;
-
+    bool IsFlagged() const;
 private:
     bool m_IsBomb = false;
 

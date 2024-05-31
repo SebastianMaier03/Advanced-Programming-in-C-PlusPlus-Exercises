@@ -11,3 +11,7 @@ int2 MinesweeperCell::GetPosition() {
 bool MinesweeperCell::IsBomb() const {
     return m_IsBomb;
 }
+
+bool MinesweeperCell::IsFlagged() const {
+    return m_Flagged;
+}

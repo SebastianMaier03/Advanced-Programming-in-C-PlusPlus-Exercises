@@ -2,8 +2,7 @@
 #include "MinesweeperCell.h"
 #include "Int2.h"
 
-class MinesweeperGrid
-{
+class MinesweeperGrid {
 public:
     MinesweeperGrid(unsigned int width, unsigned int height, float bombsPercentage);
 
@@ -25,12 +24,17 @@ public:
     bool IndexInBounds(unsigned int index) const;
     bool LocationInBounds(int2 location) const;
 
+    void ClickCell(int2 location);
+    bool IsRevealed(int2 location) const;
+    void RevealAllBombs();
     void PrintGrid() const;
-
+    bool IsCellFlagged(int2 location) const;
+    void FlagCell(int2 location);
 private:
     unsigned int m_Width = 0;
     unsigned int m_Height = 0;
     float m_BombsPercentage = 0.0f;
 
     std::vector<MinesweeperCell> m_Values;
+    std::vector<bool> m_Revealed; // Track revealed cells
 };

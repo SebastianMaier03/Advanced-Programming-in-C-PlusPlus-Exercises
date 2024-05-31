@@ -1,7 +1,8 @@
 #include "MinesweeperGrid.h"
 #include <cstdlib>
 #include <ctime>
-#include "Int2.h"
+#include <iostream>
+
 MinesweeperGrid::MinesweeperGrid(unsigned int width, unsigned int height, float bombsPercentage)
         : m_Width(width), m_Height(height), m_BombsPercentage(bombsPercentage) {
     InitializeCells();
@@ -10,6 +11,8 @@ MinesweeperGrid::MinesweeperGrid(unsigned int width, unsigned int height, float 
 void MinesweeperGrid::InitializeCells() {
     m_Values.clear();
     m_Values.resize(m_Width * m_Height);
+    m_Revealed.clear();
+    m_Revealed.resize(m_Width * m_Height, false);
 
     srand(static_cast<unsigned int>(time(nullptr)));
 
@@ -18,6 +21,9 @@ void MinesweeperGrid::InitializeCells() {
 
     for (unsigned int i = 0; i < numBombs; ++i) {
         unsigned int randomIndex = rand() % totalCells;
+        while (m_Values[randomIndex].IsBomb()) {
+            randomIndex = rand() % totalCells;
+        }
         m_Values[randomIndex] = MinesweeperCell(GetLocationFromIndex(randomIndex), true);
     }
 
@@ -55,7 +61,7 @@ bool MinesweeperGrid::IsBomb(int2 location) const {
 
 int MinesweeperGrid::GetNeighborBombCount(unsigned int index) const {
     if (index >= m_Values.size()) {
-        return 0; 
+        return 0;
     }
     return m_Values[index].m_NeighborBombCount;
 }
@@ -92,6 +98,64 @@ bool MinesweeperGrid::LocationInBounds(int2 location) const {
            location.y >= 0 && location.y < static_cast<int>(m_Height);
 }
 
+void MinesweeperGrid::ClickCell(int2 location) {
+    if (LocationInBounds(location)) {
+        unsigned int index = GetIndexFromLocation(location);
+        if (!m_Revealed[index]) {
+            if (IsCellFlagged(location)) {
+                m_Values[index].m_Flagged = false;
+            }
+            m_Revealed[index] = true;
+            if (GetNeighborBombCount(index) == 0) {
+                for (int y = -1; y <= 1; ++y) {
+                    for (int x = -1; x <= 1; ++x) {
+                        int2 neighborLocation(location.x + x, location.y + y);
+                        ClickCell(neighborLocation);
+                    }
+                }
+            }
+            else if (!IsBomb(location)) {
+                return;
+            }
+        }
+    }
+}
+
+
+
+bool MinesweeperGrid::IsRevealed(int2 location) const {
+    if (LocationInBounds(location)) {
+        unsigned int index = GetIndexFromLocation(location);
+        return m_Revealed[index];
+    }
+    return false;
+}
+
+bool MinesweeperGrid::IsCellFlagged(int2 location) const {
+    unsigned int index = GetIndexFromLocation(location);
+    return m_Values[index].IsFlagged();
+}
+
+void MinesweeperGrid::FlagCell(int2 location) {
+    if (LocationInBounds(location)) {
+        unsigned int index = GetIndexFromLocation(location);
+        if (!m_Revealed[index]) {
+            if (m_Values[index].IsFlagged()) {
+                m_Values[index].m_Flagged = false;
+            } else {
+                m_Values[index].m_Flagged = true;
+            }
+        }
+    }
+}
+void MinesweeperGrid::RevealAllBombs() {
+    for (unsigned int i = 0; i < m_Values.size(); ++i) {
+        if (m_Values[i].IsBomb()) {
+            m_Revealed[i] = true;
+        }
+    }
+}
+
 void MinesweeperGrid::PrintGrid() const {
     std::cout << "+";
     for (unsigned int i = 0; i < m_Width; ++i) {
@@ -103,13 +167,18 @@ void MinesweeperGrid::PrintGrid() const {
         std::cout << "|";
         for (unsigned int x = 0; x < m_Width; ++x) {
             unsigned int index = y * m_Width + x;
-            if (IsBomb(index)) {
+            if (IsCellFlagged(int2(x, y))) {
+                std::cout << "F";
+            } else if (!m_Revealed[index]) {
+                std::cout << ".";
+            } else if (IsBomb(index)) {
                 std::cout << "X";
             } else {
                 int neighborBombCount = GetNeighborBombCount(index);
                 if (neighborBombCount > 0) {
                     std::cout << neighborBombCount;
                 } else {
+                    // Display a blank space for revealed non-bomb cells
                     std::cout << " ";
                 }
             }
@@ -123,5 +192,3 @@ void MinesweeperGrid::PrintGrid() const {
     }
     std::cout << "+" << std::endl;
 }
-
-

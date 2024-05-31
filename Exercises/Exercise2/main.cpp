@@ -1,46 +1,84 @@
-#include "Int2.h"
-#include "MinesweeperGrid.h"
-
 #include <iostream>
-
+#include "MinesweeperGrid.h"
+#include "Int2.h"
 int main() {
-    // Exercise 3.1
-    int2 a(3, 4);
-    int2 b(2, 3);
-    int2 c = a + b;		//expected value of c: (x= 5,y= 7)
-    int2 d = a - c;		//expected value of d: (x=-2,y=-3)
-    b = d * a;		    //expected value of b: (x=-6,y=-12)
-    int2 e = b / c;		//expected value of e: (x=-1,y=-1)
-    a.x = 2;		    //expected value of a: (x= 2,y= 4)
-    c *= a;			    //expected value of c: (x=10,y=28)
-    c *= 2;			    //expected value of c: (x=20,y=56)
-    d += a;			    //expected value of d: (x= 0,y= 1)
-    d -= b;			    //expected value of d: (x= 6,y=13)
-    d.y = 6;		    //expected value of d: (x= 6,y= 6)
+    unsigned int width = 20;
+    unsigned int height = 10;
+    float bombsPercentage = 0.2f;
+    MinesweeperGrid grid(width, height, bombsPercentage);
 
-    std::cout << d << std::endl; //expected output: (6|6)
-    std::cout << e << std::endl; //expected output: (6|6)
+    bool gameOver = false;
+    bool gameWon = false;
 
 
-    // Create a MinesweeperCell
-    MinesweeperCell cell1({3, 5}, false); // Cell at position (3, 5), not a bomb
-    MinesweeperCell cell2({2, 4}, true);  // Cell at position (2, 4), is a bomb
+    while (!gameOver && !gameWon) {
+        grid.PrintGrid();
 
-    // Display cell information
-    std::cout << "Cell 1 position: (" << cell1.GetPosition().x << ", " << cell1.GetPosition().y << ")" << std::endl;
-    std::cout << "Cell 1 is a bomb: " << (cell1.IsBomb() ? "Yes" : "No") << std::endl;
-    std::cout << "Cell 2 position: (" << cell2.GetPosition().x << ", " << cell2.GetPosition().y << ")" << std::endl;
-    std::cout << "Cell 2 is a bomb: " << (cell2.IsBomb() ? "Yes" : "No") << std::endl;
+        int x, y;
+        std::string action;
+        std::cout << "Enter coordinates to click (x y), type flag (flag x y), or type 'exit' to quit: ";
+        std::cin >> action;
 
-    // Create a Minesweeper grid with width 5, height 5, and 20% bombs
-    MinesweeperGrid grid(20, 20, 0.2f);
+        if (action == "exit") {
+            gameOver = true;
+            break;
+        }
 
-    // Print the grid
-    std::cout << "Minesweeper Grid:" << std::endl;
-    grid.PrintGrid();
+        try {
+            if (action == "flag") {
+                std::cin >> x >> y;
+                --x;
+                --y;
+                int2 flagLocation(x, y);
+                grid.FlagCell(flagLocation);
+            } else {
+                x = std::stoi(action);
+                std::cin >> y;
+                --x;
+                --y;
+                int2 clickLocation(x, y);
+                grid.ClickCell(clickLocation);
+                if (grid.IsBomb(clickLocation)) {
+                    std::cout << "Game Over! You clicked on a bomb." << std::endl;
+                    gameOver = true;
+                } else {
+                    bool allNonBombCellsRevealed = true;
+                    for (unsigned int i = 0; i < width * height; ++i) {
+                        int2 location = grid.GetLocationFromIndex(i);
+                        if (!grid.IsBomb(location) && !grid.IsRevealed(location)) {
+                            allNonBombCellsRevealed = false;
+                            break;
+                        }
+                    }
+                    if (allNonBombCellsRevealed) {
+                        bool allBombCellsFlagged = true;
+                        for (unsigned int i = 0; i < width * height; ++i) {
+                            int2 location = grid.GetLocationFromIndex(i);
+                            if (grid.IsBomb(location) && !grid.IsCellFlagged(location)) {
+                                allBombCellsFlagged = false;
+                                break;
+                            }
+                        }
+                        if (allBombCellsFlagged) {
+                            std::cout << "Congratulations! You have won the game!" << std::endl;
+                            gameOver = true;
+                            gameWon = true;
+                        }
+                    }
+                }
+            }
+        } catch (std::exception& e) {
+            std::cout << "Invalid input. Please enter valid coordinates or type 'exit' to quit." << std::endl;
+            continue;
+        }
+    }
+
+    // Show all bombs when the game is over
+    if (gameOver) {
+        std::cout << "Game Over! Revealing all bombs:" << std::endl;
+        grid.RevealAllBombs();
+        grid.PrintGrid();
+    }
 
     return 0;
-
-
-
 }
