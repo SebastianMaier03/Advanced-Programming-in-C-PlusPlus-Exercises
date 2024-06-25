@@ -15,4 +15,6 @@ add_executable(Exercise2
         MinesweeperCell.h
         MinesweeperCell.cpp
         MinesweeperGrid.cpp
-        MinesweeperGrid.h)
+        MinesweeperGrid.h
+        ../Exercise5/City.cpp
+        ../Exercise5/City.h)
