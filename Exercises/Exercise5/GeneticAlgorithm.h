@@ -10,4 +10,4 @@ Individual crossover(const Individual& parent1, const Individual& parent2);
 void mutate(Individual& individual);
 void geneticAlgorithm(const std::vector<City>& cities, int populationSize, int generations, float mutationChance);
 
-#endif
+#endif // GENETICALGORITHM_H

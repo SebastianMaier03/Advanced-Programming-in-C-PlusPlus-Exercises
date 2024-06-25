@@ -1,5 +1,6 @@
 #include "GeneticAlgorithm.h"
 #include <algorithm>
+#include <numeric>
 #include <random>
 #include <iostream>
 
@@ -104,6 +105,13 @@ void geneticAlgorithm(const std::vector<City>& cities, int populationSize, int g
         std::sort(population.begin(), population.end());
         population.erase(population.begin() + populationSize, population.end());
 
-        std::cout << "Generation " << gen << " Best Fitness: " << population.front().fitness << std::endl;
+        std::cout << "Generation " << gen + 1 << " Best Fitness: " << population.front().fitness << std::endl;
     }
+
+    std::cout << "Final best path fitness: " << population.front().fitness << std::endl;
+    std::cout << "Path: ";
+    for (int city : population.front().path) {
+        std::cout << city << " ";
+    }
+    std::cout << std::endl;
 }

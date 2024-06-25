@@ -5,7 +5,8 @@
 
 class City {
 public:
-    float x, y;
+    float x;
+    float y;
     std::vector<float> distances;
 
     City(float x, float y);
