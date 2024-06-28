@@ -5,13 +5,6 @@
 #include "Individual.h"
 #include "GeneticAlgorithm.h"
 
-void printPath(const std::vector<int>& path) {
-    for (int city : path) {
-        std::cout << city << " ";
-    }
-    std::cout << std::endl;
-}
-
 int main() {
     std::vector<City> cities = {
             {3, 10.5}, {-2, 8.5}, {-4, 6}, {-1, 5}, {-3.5, 4}, {-5.5, 2},
